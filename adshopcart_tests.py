@@ -1,4 +1,6 @@
 import unittest
+import datetime
+
 import adshopcart_methods as methods
 import adshopcart_locators as locators
 
@@ -6,15 +8,20 @@ import adshopcart_locators as locators
 driver = methods.driver
 By = methods.By
 sleep = methods.sleep
+divider = methods.divider
 
 
-class RegisterNewUserCheckFirstSignIn(unittest.TestCase):
+class AOSTest(unittest.TestCase):
 
-    # Scenario_01: Register new user and check first sign in with this new registered user
     @staticmethod
-    def test_register_new_user_check_first_sign_in():
+    def test_AOS():
         # Open browser -> navigate to home page -> validate correct URL and title
-        methods.setUp('Scenario_01')
+        methods.setUp()
+
+        # Scenario_01: Register new user and check first sign in with this new registered user
+        print(divider)
+        print(f'Scenario_01 started at {datetime.datetime.now()}')
+        print('Scenario_01: Register new user and check first sign in with this new registered user')
 
         # Register new user
         methods.register_new_user()
@@ -52,17 +59,17 @@ class RegisterNewUserCheckFirstSignIn(unittest.TestCase):
             print('Verification message  "Incorrect user name or password." --- is displayed')
             print('Not exists user is not able to sign in --- correct')
 
-        # Close the web browser
-        methods.tearDown('Scenario_01')
+        print(divider)
+        print(f'Scenario_01 completed at {datetime.datetime.now()}')
 
+    # ==============================================================================
 
-class CheckHomePage(unittest.TestCase):
-
-    # Scenario_02: We check content on home page - links/buttons/contact us form
-    @staticmethod
-    def test_check_home_page():
-        # Open browser -> navigate to home page -> validate correct URL and title
-        methods.setUp('Scenario_02')
+        driver.get(locators.homepage_url)
+        driver.refresh()
+        # Scenario_02: We check content on home page - links/buttons/contact us form
+        print(divider)
+        print(f'Scenario_02 started at {datetime.datetime.now()}')
+        print('Scenario_02: We check content on home page - links/buttons/contact us form')
 
         # Validate product categories:
         # 1. category name is displayed/clickable/landed on correct page
@@ -79,49 +86,10 @@ class CheckHomePage(unittest.TestCase):
         methods.contact_us()
 
         # Close the web browser
-        methods.tearDown('Scenario_02')
+        methods.tearDown()
+
+        print(divider)
+        print(f'Scenario_02 completed at {datetime.datetime.now()}')
 
 
 
-
-
-
-
-# class MyChecks(unittest.TestCase):
-#
-#     @staticmethod
-#     def test_1():
-#
-#         methods.setUp('Scenario_01')
-#
-#         # methods.register_new_user()
-#         # Username: | StephenBenson
-#         # Password: | @@PTOWb1G4O
-#         # Stephen Benson
-#
-#         # Sign in with my details
-#         sleep(1)
-#         user_link = driver.find_element(By.XPATH, '//*[@id = "menuUserLink"]')
-#         driver.execute_script('arguments[0].click();', user_link)
-#         sleep(1)
-#         driver.find_element(By.XPATH, '//input[@name = "username"]').send_keys('StephenBenson')
-#         sleep(1)
-#         driver.find_element(By.XPATH, '//input[@name = "password"]').send_keys('@@PTOWb1G4O')
-#         # click Sign in
-#         driver.find_element(By.ID, 'sign_in_btnundefined').click()
-#
-#         # ====================   Validate details on My Account menu
-#         # Navigate to My Account menu
-#         sleep(1)
-#         driver.find_element(By.XPATH, '//*[@id= "menuUserLink"]/span').click()
-#         sleep(1)
-#         driver.find_element(By.XPATH, '//*[@id="loginMiniTitle"]/label[text() = "My account"]').click()
-#         # Validate correct Full name
-#         sleep(1)
-#         # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "{locators.full_name}")]').is_displayed():
-#         # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "Stephen Benson")]').is_displayed():
-#         if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/*/label[contains(., "Stephen Benson")]').is_displayed():
-#
-#             print('Full name on My Account details --- correct')
-#         else:
-#             print('CHECK CODE - Full name on My Account details --- NOT correct.')

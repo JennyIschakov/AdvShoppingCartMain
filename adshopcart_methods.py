@@ -1,4 +1,4 @@
-import datetime
+
 from random import random
 from time import sleep
 import random
@@ -21,13 +21,7 @@ divider = '-----------------------------------------'
 # =================================================
 
 
-def setUp(scenario_num):
-    # Test started
-    print(divider)
-    text = f'{scenario_num} started at {datetime.datetime.now()}'
-    print(text)
-    print(divider)
-
+def setUp():
     # Navigating to the home page app website
     driver.get(locators.homepage_url)
     driver.implicitly_wait(30)
@@ -46,13 +40,10 @@ def setUp(scenario_num):
         driver.quit()
 
 
-def tearDown(scenario_num):
+def tearDown():
     sleep(1)
     # check if driver is working
     if driver is not None:
-        print(divider)
-        text = f'{scenario_num} completed at {datetime.datetime.now()}'
-        print(text)
         driver.close()
         driver.quit()
 
