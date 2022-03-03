@@ -43,6 +43,8 @@ if len(phone) > 20:
     while len(phone) <= 20:
         phone = fake.phone_number()
 
+# Message text box
+message = fake.sentence(nb_words=random.randint(1, 30))
 
 # Country - random select from dropdown
 # country_dropdown = driver.find_element(By.XPATH, '//select[@name = "countryListboxRegisterPage"]')

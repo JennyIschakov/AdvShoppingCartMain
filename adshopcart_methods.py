@@ -1,16 +1,20 @@
 import datetime
+from random import random
 from time import sleep
+import random
 
 from prettytable import PrettyTable
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver import ActionChains
 
 import adshopcart_locators as locators
 
 # ================================================= Variables
 
 driver = webdriver.Chrome()
+action = ActionChains(driver)
 
 divider = '-----------------------------------------'
 
@@ -228,6 +232,179 @@ def delete_account(): # while we are inside account
     driver.find_element(By.XPATH, '//div[@class = "deletePopupBtn deleteRed"]').click()
     print('Account deleted successfully')
     sleep(8) # long sleep because page is updated longer after deleting account
+
+
+# Validate product categories:
+# 1. category name is displayed/clickable/landed on correct page
+# 2. for each category - Shop now is displayed/clickable/landed on correct page
+def check_product_categories():
+    sleep(1)
+    print(divider)
+    print('We check product categories: \n'
+          '1. category name is displayed/clickable/landed on correct page\n'
+          '2. for each category - "Shop now" is displayed/clickable/landed on correct page')
+
+    def validate_categories(category, category_id, url, shop_now_id):
+        print(f'\n ============  {category} ==============')
+        if driver.find_element(By.ID, category_id).is_displayed():
+            driver.find_element(By.ID, category_id).click()
+            sleep(1)
+            print(f'<{category}> category is displayed and clickable')
+            if driver.current_url == url:
+                print(f'Clicked on <{category}> ---  landed successfully on <{category}> page')
+
+        sleep(1)
+        driver.back()
+        driver.refresh()
+        sleep(2)
+
+        action.move_to_element(driver.find_element(By.ID, category_id)).perform()
+        driver.find_element(By.ID, shop_now_id).click()
+        sleep(1)
+        print(f'"Shop now" of <{category}> is displayed and clickable')
+        if driver.current_url == url:
+            print(f'Clicked on "Shop now" ---  landed successfully on <{category}> page')
+
+        sleep(1)
+        driver.back()
+        driver.refresh()
+        sleep(2)
+
+    # SPEAKERS
+    validate_categories('SPEAKERS', 'speakersTxt', 'https://advantageonlineshopping.com/#/category/Speakers/4', 'speakersLink')
+    # TABLETS
+    validate_categories('TABLETS', 'tabletsTxt', 'https://advantageonlineshopping.com/#/category/Tablets/3', 'tabletsLink')
+    # HEADPHONES
+    validate_categories('HEADPHONES', 'headphonesTxt', 'https://advantageonlineshopping.com/#/category/Headphones/2', 'headphonesLink')
+    # LAPTOPS
+    validate_categories('LAPTOPS', 'laptopsTxt', 'https://advantageonlineshopping.com/#/category/Laptops/1', 'laptopsLink')
+    # MICE
+    validate_categories('MICE', 'miceTxt', 'https://advantageonlineshopping.com/#/category/Mice/5', 'miceLink')
+
+
+def check_top_navigation_menu():
+    sleep(1)
+    print(divider)
+    print('Validation of navigation top menus: displayed and clickable')
+    navigation_menu = ['SPECIAL OFFER', 'POPULAR ITEMS', 'CONTACT US', 'OUR PRODUCTS']
+    for menu in navigation_menu:
+        sleep(2)
+        element = driver.find_element(By.LINK_TEXT, f'{menu}')
+        if element.is_displayed():
+            driver.execute_script("arguments[0].click();", element)
+            print(f'<{menu}> is displayed and clickable')
+        else:
+            print(f'CHECK CODE --- <{menu}> is not clickable')
+
+
+# Validate main logo is displayed
+def main_logo():
+    sleep(1)
+    print(divider)
+    print('We check that all three elements of main logo - are displayed:')
+    # Element 1 - picture "A"
+    if driver.find_element(By.XPATH, '//*[@id = "Layer_1"]').is_displayed():
+        print('Element 1 - picture "A" --- is displayed')
+    else:
+        print(f'CHECK CODE --- Element 1 - picture "A" --- is NOT displayed')
+
+    # Element 2 - text "dvantage"
+    if driver.find_element(By.XPATH, '//span[text() = "dvantage"]').is_displayed():
+        print('Element 2 - text "dvantage" --- is displayed')
+    else:
+        print(f'CHECK CODE --- Element 2 - text "dvantage" --- is NOT displayed')
+
+    # Element 3 - text "DEMO"
+    if driver.find_element(By.XPATH, '//span[text() = "DEMO"]').is_displayed():
+        print('Element 3 - text "DEMO" --- is displayed')
+    else:
+        print(f'CHECK CODE --- Element 3 - text "DEMO" --- is NOT displayed')
+
+
+def select_random_dropdown(xpath):
+    sleep(1)
+    dropdown = driver.find_element(By.XPATH, xpath)
+    sleep(2)
+    dropdown.click()
+    sleep(1)
+    dropdown_options = Select(dropdown).options
+    dropdown_list = []
+    for option in dropdown_options[1::]: # without first option
+        dropdown_list.append(option.text)
+
+    sleep(1)
+    random_choice = random.choice(dropdown_list)
+    sleep(1)
+    Select(dropdown).select_by_visible_text(random_choice)
+    return random_choice
+
+
+def contact_us():
+    sleep(1)
+    print(divider)
+    print('Validation of CONTACT US form:')
+    # Navigate to CONTACT US form
+    element = driver.find_element(By.LINK_TEXT, 'CONTACT US')
+    if element.is_displayed():
+        driver.execute_script("arguments[0].click();", element)
+        print(f'We navigated successfully to CONTACT US form ')
+    else:
+        print(f'CHECK CODE --- We did not navigate to CONTACT US form')
+
+    # =================  Start to fill form =================
+    # Select Category
+    sleep(1)
+    selected_category = select_random_dropdown('//select[@name="categoryListboxContactUs"]')
+    # Select Product
+    sleep(1)
+    selected_product = select_random_dropdown('//select[@name="productListboxContactUs"]')
+    # Email
+    sleep(1)
+    driver.find_element(By.XPATH, '//input[@name = "emailContactUs"]').send_keys(locators.email)
+    # Message
+    sleep(1)
+    driver.find_element(By.XPATH, '//textarea[@name="subjectTextareaContactUs"]').send_keys(locators.message)
+    # Click SEND button
+    sleep(1)
+    driver.find_element(By.ID, 'send_btnundefined').click()
+
+    # =================  End to fill form =================
+
+    # Summarize the form
+    print(divider)
+    print('CONTACT US form filled successfully, with following details:')
+    sleep(1)
+    contact_us_form = PrettyTable()
+    contact_us_form.field_names = ['Field:       Value']
+    contact_us_form.add_rows([
+        [f'Selected category: {selected_category}'],
+        [f'Selected product: {selected_product}'],
+        [f'Email: {locators.email}'],
+        [f'Message: {locators.message}'],
+    ])
+
+    contact_us_form.align = 'l'
+    # Print form to console
+    print(contact_us_form)
+    sleep(1)
+    # Validate confirmation message that Contact US form submitted
+    if driver.find_element(By.XPATH, '//p[contains(., "Thank you for contacting Advantage support.")]'):
+        print('Confirmation message "Thank you for contacting Advantage support." --- is displayed \n'
+              'CONTACT US form submitted')
+    else:
+        print('CHECK CODE --- no confirmation message displayed after submitting CONTACT US form')
+    # Continue to Shopping
+    sleep(1)
+    driver.find_element(By.XPATH, '//a[contains(., "CONTINUE SHOPPING")]').click()
+    print("Button <CONTINUE SHOPPING> - clicked")
+
+
+
+
+
+
+
+
 
 
 

@@ -56,41 +56,72 @@ class RegisterNewUserCheckFirstSignIn(unittest.TestCase):
         methods.tearDown('Scenario_01')
 
 
-class MyChecks(unittest.TestCase):
+class CheckHomePage(unittest.TestCase):
 
+    # Scenario_02: We check content on home page - links/buttons/contact us form
     @staticmethod
-    def test_1():
+    def test_check_home_page():
+        # Open browser -> navigate to home page -> validate correct URL and title
+        methods.setUp('Scenario_02')
 
-        methods.setUp('Scenario_01')
+        # Validate product categories:
+        # 1. category name is displayed/clickable/landed on correct page
+        # 2. for each category - Shop now is displayed/clickable/landed on correct page
+        methods.check_product_categories()
 
-        # methods.register_new_user()
-        # Username: | StephenBenson
-        # Password: | @@PTOWb1G4O
-        # Stephen Benson
+        # Validation of navigation top menus: clickable and go to right section
+        methods.check_top_navigation_menu()
 
-        # Sign in with my details
-        sleep(1)
-        user_link = driver.find_element(By.XPATH, '//*[@id = "menuUserLink"]')
-        driver.execute_script('arguments[0].click();', user_link)
-        sleep(1)
-        driver.find_element(By.XPATH, '//input[@name = "username"]').send_keys('StephenBenson')
-        sleep(1)
-        driver.find_element(By.XPATH, '//input[@name = "password"]').send_keys('@@PTOWb1G4O')
-        # click Sign in
-        driver.find_element(By.ID, 'sign_in_btnundefined').click()
+        # Validate main logo is displayed
+        methods.main_logo()
 
-        # ====================   Validate details on My Account menu
-        # Navigate to My Account menu
-        sleep(1)
-        driver.find_element(By.XPATH, '//*[@id= "menuUserLink"]/span').click()
-        sleep(1)
-        driver.find_element(By.XPATH, '//*[@id="loginMiniTitle"]/label[text() = "My account"]').click()
-        # Validate correct Full name
-        sleep(1)
-        # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "{locators.full_name}")]').is_displayed():
-        # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "Stephen Benson")]').is_displayed():
-        if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/*/label[contains(., "Stephen Benson")]').is_displayed():
+        # Validation of CONTACT US form
+        methods.contact_us()
 
-            print('Full name on My Account details --- correct')
-        else:
-            print('CHECK CODE - Full name on My Account details --- NOT correct.')
+        # Close the web browser
+        methods.tearDown('Scenario_02')
+
+
+
+
+
+
+
+# class MyChecks(unittest.TestCase):
+#
+#     @staticmethod
+#     def test_1():
+#
+#         methods.setUp('Scenario_01')
+#
+#         # methods.register_new_user()
+#         # Username: | StephenBenson
+#         # Password: | @@PTOWb1G4O
+#         # Stephen Benson
+#
+#         # Sign in with my details
+#         sleep(1)
+#         user_link = driver.find_element(By.XPATH, '//*[@id = "menuUserLink"]')
+#         driver.execute_script('arguments[0].click();', user_link)
+#         sleep(1)
+#         driver.find_element(By.XPATH, '//input[@name = "username"]').send_keys('StephenBenson')
+#         sleep(1)
+#         driver.find_element(By.XPATH, '//input[@name = "password"]').send_keys('@@PTOWb1G4O')
+#         # click Sign in
+#         driver.find_element(By.ID, 'sign_in_btnundefined').click()
+#
+#         # ====================   Validate details on My Account menu
+#         # Navigate to My Account menu
+#         sleep(1)
+#         driver.find_element(By.XPATH, '//*[@id= "menuUserLink"]/span').click()
+#         sleep(1)
+#         driver.find_element(By.XPATH, '//*[@id="loginMiniTitle"]/label[text() = "My account"]').click()
+#         # Validate correct Full name
+#         sleep(1)
+#         # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "{locators.full_name}")]').is_displayed():
+#         # if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/div[1]/div/div[1]/label[contains(., "Stephen Benson")]').is_displayed():
+#         if driver.find_element(By.XPATH, f'//*[@id="myAccountContainer"]/*/label[contains(., "Stephen Benson")]').is_displayed():
+#
+#             print('Full name on My Account details --- correct')
+#         else:
+#             print('CHECK CODE - Full name on My Account details --- NOT correct.')
