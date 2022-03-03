@@ -13,7 +13,7 @@ import adshopcart_locators as locators
 
 # ================================================= Variables
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(executable_path='C:\chromedriver.exe')
 action = ActionChains(driver)
 
 divider = '-----------------------------------------'
